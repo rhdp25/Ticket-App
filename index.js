@@ -24,6 +24,21 @@ app.get("/", function (req, res) {
   res.render("index", { title: "Ticket App", isLogin: false });
 });
 
+// Render login page
+app.get("/login", function (req, res) {
+  res.render("auth/login", { title: "Ticket App | Login", isLogin: false });
+});
+
+// Render register page
+app.get("/register", function (req, res) {
+  res.render("auth/register", { title: "Ticket App | Register", isLogin: false });
+});
+
+// Render genre page
+app.get("/genre", function (req, res) {
+  res.render("movie/genre", { title: "Ticket App | Genre", isLogin: false });
+});
+
 const server = http.createServer(app);
 const port = 4000;
 server.listen(port, () => {
