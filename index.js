@@ -5,7 +5,9 @@ const path = require("path");
 const app = express();
 const hbs = require("hbs");
 
-app.use(express.static("express"));
+// app.use(express.static("express"));
+app.use("/static", express.static(path.join(__dirname, "public")));
+
 app.use(express.urlencoded({ extended: false }));
 
 // Set views location to app
