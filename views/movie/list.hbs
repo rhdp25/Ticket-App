@@ -1,0 +1,56 @@
+{{> head}}
+{{> navbar}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row">
+        <div class="row text-center m-3">
+            <div class="col">
+                <h2>Movie</h2>
+            </div>
+        </div>
+        <div class="row text-center m-3">
+            <div class="col">
+                <input type="text" name="title" id="title" placeholder="Input movie title">
+            </div>
+        </div>
+        <div class="row text-center m-3">
+            <div class="col-4">
+                <select name="genre" id="genre"></select>
+            </div>
+            <div class="col-4">
+                <select name="rating" id="rating">
+                    <option disabled value="...">Select rating</option>
+                    <option value="G">G</option>
+                    <option value="PG">PG</option>
+                    <option value="P13">PG-13</option>
+                    <option value="R">R</option>
+                    <option value="N17">NC-17</option>
+                </select>
+            </div>
+            <div class="col-4">
+                <input type="number" name="duration_min" placeholder="Movie duration (min)">
+            </div>
+        </div>
+        <div class="row text-center m-3">
+            <div class="col">
+                <div class="file-input-group text-start">
+                    <input type="file" hidden id="file" aria-label="file upload">
+                    <label class="input-group-text" for="file">Attach movie cover</label>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center m-3">
+            <div class="col">
+                <button type="submit" class="mt-4">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}

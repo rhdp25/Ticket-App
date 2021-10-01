@@ -1,0 +1,40 @@
+{{> head}}
+{{> navbar}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <select name="ticket_id" id="ticket_id">
+                <option value="..." disabled>Select ticket...</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="number" name="amount" id="amount">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="number" name="discount" id="discount">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="number" name="sub-total" id="sub-total" disabled>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button type="submit" class="mt-4">Add</button>
+        </div>
+    </div>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}

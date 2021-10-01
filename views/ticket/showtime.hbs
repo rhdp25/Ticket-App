@@ -1,0 +1,47 @@
+{{> head}}
+{{> navbar}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2>Show Time</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <select name="movie_id" id="movie_id">
+                <option value="..." disabled>Select movie...</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <input type="date" name="date_show" id="date_show">
+        </div>
+        <div class="col-4">
+            <input type="time" name="time_show" id="time_show">
+        </div>
+        <div class="col-4">
+            <input type="time" name="venue" id="venue">
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-group mb-3">
+            <span class="input-group-text">Rp</span>
+            <input type="number" class="form-control" name="price" id="price">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button type="submit" class="mt-4">Add</button>
+        </div>
+    </div>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}

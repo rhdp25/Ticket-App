@@ -1,0 +1,37 @@
+{{> head}}
+{{> navbar}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <select name="user_id" id="user_id">
+                <option value="..." disabled>Select user...</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <select name="showtime_id" id="showtime_id">
+                <option value="..." disabled>Select showtime...</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="text" name="seat_number" id="seat_number" placeholder="Seat number">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button type="submit" class="mt-4">Add</button>
+        </div>
+    </div>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}
