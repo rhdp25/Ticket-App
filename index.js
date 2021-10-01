@@ -2,6 +2,7 @@
 const http = require("http");
 const express = require("express");
 const path = require("path");
+const session = require("express-session");
 
 const app = express();
 const hbs = require("hbs");
@@ -9,6 +10,7 @@ const hbs = require("hbs");
 const authRoute = require("./routes/auth");
 const movieRoute = require("./routes/movie");
 const ticketRoute = require("./routes/ticket");
+const { Cookie } = require("express-session");
 
 // app.use(express.static("express"));
 app.use("/static", express.static(path.join(__dirname, "public")));
@@ -24,11 +26,23 @@ app.set("view engine", "hbs");
 // Register view partials
 hbs.registerPartials(path.join(__dirname, "views/partials"));
 
-let isLogin = true;
+app.use(
+  session({
+    cookie: {
+      maxAge: 3 * 60 * 60 * 1000,
+      secure: false,
+      httpOnly: true,
+    },
+    store: new session.MemoryStore(),
+    saveUninitialized: true,
+    resave: false,
+    secret: "secretValue",
+  })
+);
 
 // Render home page
 app.get("/", function (req, res) {
-  res.render("index", { title: "Ticket App", isLogin });
+  res.render("index", { title: "Ticket App", isLogin: req.session.isLogin });
 });
 
 // Use route
