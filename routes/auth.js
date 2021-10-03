@@ -9,6 +9,17 @@ router.get("/login", function (req, res) {
   res.render("auth/login", { title: "Ticket App > Login", isLogin: req.session.isLogin });
 });
 
+// Render register page
+router.get("/register", function (req, res) {
+  res.render("auth/register", { title: "Ticket App > Register", isLogin: req.session.isLogin });
+});
+
+// logout
+router.get("/logout", function (req, res) {
+  req.session.destroy();
+  res.redirect("/");
+});
+
 // Login handler
 router.post("/login", function (req, res) {
   const { email, password } = req.body;
@@ -19,7 +30,7 @@ router.post("/login", function (req, res) {
       type: "danger",
       message: "Please fulfill input",
     };
-    res.redirect("/login");
+    res.redirect("/auth/login");
     return;
   }
 
@@ -35,7 +46,7 @@ router.post("/login", function (req, res) {
           type: "danger",
           message: "Email or password are incorrect. Please try again!",
         };
-        return res.redirect("/login");
+        return res.redirect("/auth/login");
       } else {
         req.session.message = {
           type: "success",
@@ -57,11 +68,6 @@ router.post("/login", function (req, res) {
   });
 });
 
-// Render register page
-router.get("/register", function (req, res) {
-  res.render("auth/register", { title: "Ticket App > Register", isLogin: req.session.isLogin });
-});
-
 // Handle register from client
 router.post("/register", function (req, res) {
   const { name, email, password } = req.body;
@@ -73,13 +79,13 @@ router.post("/register", function (req, res) {
       type: "danger",
       message: "Please fulfill input",
     };
-    res.redirect("/register");
+    res.redirect("/auth/register");
     return;
   }
 
   const hashedPassword = bcrypt.hashSync(password, 10);
 
-  dbConnection.getConnection((err, results) => {
+  dbConnection.getConnection((err, conn) => {
     if (err) throw err;
 
     // Execute query
@@ -90,7 +96,7 @@ router.post("/register", function (req, res) {
         type: "success",
         message: "Register successfull. You can login.",
       };
-      res.redirect("/register");
+      res.redirect("/auth/register");
       return;
     });
 

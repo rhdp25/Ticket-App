@@ -1,17 +1,28 @@
 {{> head}}
 {{> navbar}}
 
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
 <div class="container text-center pt-5">
     <form action="" method="POST">
         <div class="row text-center m-3">
             <div class="col">
-                <div class="p-2">
+                <h2>Register</h2>
+            </div>
+        </div>
+        <div class="row text-center m-3">
+            <div class="col">
+                <div class="p-1">
                     <input type="name" name="name" placeholder="Input your name">
                 </div>
-                <div class="p-2">
+                <div class="p-1">
                     <input type="email" name="email" placeholder="Input your email">
                 </div>
-                <div class="p-2">
+                <div class="p-1">
                     <input type="password" name="password" placeholder="Input your password">
                 </div>
             </div>

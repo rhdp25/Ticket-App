@@ -1,6 +1,12 @@
 {{> head}}
 {{> navbar}}
 
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
 {{#if isLogin}}
 <div class="container">
     <div class="row">
@@ -26,6 +32,41 @@
         <div class="col">
             <button type="submit" class="mt-4">Add</button>
         </div>
+    </div>
+    <div class="row">
+        <div class="row">
+            <div class="col">
+                <h2>List of Booking</h2>
+            </div>
+        </div>
+        {{#each bookings}}
+        <div class="row">
+            <div class="row">
+                <div class="col-3">
+                    <span>User: </span>
+                </div>
+                <div class="col">
+                    <span>{{this.user_id}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <span>Show Time: </span>
+                </div>
+                <div class="col">
+                    <span>{{this.showtime_id}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <span>Seat Numbers: </span>
+                </div>
+                <div class="col">
+                    <span>{{this.seat_number}}</span>
+                </div>
+            </div>
+        </div>
+        {{/each}}
     </div>
 </div>
 {{else}}

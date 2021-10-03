@@ -1,6 +1,12 @@
 {{> head}}
 {{> navbar}}
 
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
 {{#if isLogin}}
 <div class="container">
     <div class="row">
@@ -16,7 +22,7 @@
         </div>
         <div class="row text-center m-3">
             <div class="col-4">
-                <select name="genre" id="genre"></select>
+                <select name="genre_id" id="genre_id"></select>
             </div>
             <div class="col-4">
                 <select name="rating" id="rating">
@@ -35,7 +41,7 @@
         <div class="row text-center m-3">
             <div class="col">
                 <div class="file-input-group text-start">
-                    <input type="file" hidden id="file" aria-label="file upload">
+                    <input type="file" hidden name=cover>
                     <label class="input-group-text" for="file">Attach movie cover</label>
                 </div>
             </div>
@@ -45,6 +51,54 @@
                 <button type="submit" class="mt-4">Add</button>
             </div>
         </div>
+    </div>
+    <div class="row">
+        <div class="row">
+            <div class="col">
+                <h2>List of Movie</h2>
+            </div>
+        </div>
+        {{#each movies}}
+        <div class="row">
+            <div class="col-3">
+                <img src=".../uploads/{{this.cover}}" alt="" srcset="">
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col-3">
+                        <span>Title: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.title}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Genre: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.genre_id}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Rating: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.rating}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Duration: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.duration_min}} minutes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
     </div>
 </div>
 {{else}}
