@@ -9,8 +9,11 @@ const app = express();
 const hbs = require("hbs");
 
 const authRoute = require("./routes/auth");
+const bookingRoute = require("./routes/booking");
+const genreRoute = require("./routes/genre");
 const movieRoute = require("./routes/movie");
-const ticketRoute = require("./routes/ticket");
+const paymentRoute = require("./routes/payment");
+const showtimeRoute = require("./routes/showtime");
 
 // Import db connection
 const dbConnection = require("./connection/db");
@@ -62,8 +65,11 @@ app.get("/", function (req, res) {
 
 // Mount route
 app.use("/auth", authRoute);
+app.use("/booking", bookingRoute);
+app.use("/genre", genreRoute);
 app.use("/movie", movieRoute);
-app.use("/ticket", ticketRoute);
+app.use("/payment", paymentRoute);
+app.use("/showtime", showtimeRoute);
 
 const server = http.createServer(app);
 const port = 4000;

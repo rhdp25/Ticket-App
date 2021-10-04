@@ -1,0 +1,59 @@
+{{> head}}
+{{> navbar}}
+
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row text-center m-3">
+        <div class="col">
+            <h2>Edit Payment</h2>
+        </div>
+    </div>
+    <form action="/payment/edit/{{payments.id}}" method="POST">
+    <input type="hidden" name="id" value={{payments.id}}>    
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Ticket ID: </span>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" name="ticket_id" id="ticket_id" placeholder="Input ticket ID" value={{payments.ticket_id}}>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Amount : </span>
+        </div>
+        <div class="col">
+            <input type="number" class="form-control" name="amount" id="amount" placeholder="Input amount ticket" value={{payments.amount}}>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Sub-Total : </span>
+        </div>
+        <div class="col">
+            <div class="input-group">
+                <span class="input-group-text">Rp</span>
+                <input type="number" class="form-control" name="sub_total" id="sub_total" placeholder="Input sub-total" value={{payments.sub_total}}>
+            </div>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Update</button>
+        </div>
+    </div>
+    </form>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}

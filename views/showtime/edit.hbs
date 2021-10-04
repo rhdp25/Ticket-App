@@ -1,0 +1,75 @@
+{{> head}}
+{{> navbar}}
+
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row text-center m-3">
+        <div class="col">
+            <h2>Edit Show Time</h2>
+        </div>
+    </div>
+    <form action="/showtime/edit/{{showtimes.id}}" method="POST">
+    <input type="hidden" name="id" value={{showtimes.id}}>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Movie ID: </span>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" name="movie_id" id="movie_id" placeholder="Input movie ID" value={{showtimes.movie_id}}>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Date Show: </span>
+        </div>
+        <div class="col">
+            <input type="date" class="form-control" name="date_show" id="date_show" value={{showtimes.date_show}}>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Time Show: </span>
+        </div>
+        <div class="col">
+            <input type="time" class="form-control" name="time_show" id="time_show" value={{showtimes.time_show}}>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Venue Open: </span>
+        </div>
+        <div class="col">
+            <input type="time" class="form-control" name="venue" id="venue" value={{showtimes.venue}}>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Price (per Seat) : </span>
+        </div>
+        <div class="col">
+            <div class="input-group">
+                <span class="input-group-text">Rp</span>
+                <input type="number" class="form-control" name="price" id="price" value={{showtimes.price}}>
+            </div>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Update</button>
+        </div>
+    </div>
+    </form>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}

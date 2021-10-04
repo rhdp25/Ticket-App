@@ -1,0 +1,56 @@
+{{> head}}
+{{> navbar}}
+
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row text-center m-3">
+        <div class="col">
+            <h2>Edit Booking</h2>
+        </div>
+    </div>
+    <form action="/booking/edit/{{bookings.id}}" method="POST">
+    <input type="hidden" name="id" value={{bookings.id}}>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>User ID: </span>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" name="user_id" id="user_id" placeholder="Input user ID" value={{bookings.user_id}}>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Show Time ID: </span>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" name="showtime_id" id="showtime_id" placeholder="Input showtime ID" value={{bookings.showtime_id}}>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Seat Number(s):</span>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control"  name="seat_number" id="seat_number" placeholder="Seat number" value="{{bookings.seat_number}}">
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Update</button>
+        </div>
+    </div>
+    </form>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}

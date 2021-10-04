@@ -1,0 +1,181 @@
+{{> head}}
+{{> navbar}}
+
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row text-center m-3">
+        <div class="col">
+            <h2>Add Show Time</h2>
+        </div>
+    </div>
+    <form action="" method="POST">
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Movie ID: </span>
+        </div>
+        <div class="col">
+            {{!-- <select name="movie_id" id="movie_id">
+                <option value="..." disabled>Select movie...</option>
+                {{#each showtimes}}
+                <option value="{{this.movie_id}}">{{this.title}}</option>
+                {{/each}}
+            </select> --}}
+            <input type="text" class="form-control" name="movie_id" id="movie_id" placeholder="Input movie ID">
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Date Show: </span>
+        </div>
+        <div class="col">
+            <input type="date" class="form-control" name="date_show" id="date_show">
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Time Show: </span>
+        </div>
+        <div class="col">
+            <input type="time" class="form-control" name="time_show" id="time_show">
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Venue Open: </span>
+        </div>
+        <div class="col">
+            <input type="time" class="form-control" name="venue" id="venue">
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Price (per Seat) : </span>
+        </div>
+        <div class="col">
+            <div class="input-group">
+                <span class="input-group-text">Rp</span>
+                <input type="number" class="form-control" name="price" id="price" placeholder="Input ticket price">
+            </div>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Add</button>
+        </div>
+    </div>
+    </form>
+    <hr>
+    <div class="row">
+        <div class="row text-center m-3">
+            <div class="col">
+                <h2>List of Show Time</h2>
+            </div>
+        </div>
+        {{#each showtimes}}
+        <div class="row m-2">
+            <div class="col-3">
+                <img src="../uploads/{{this.cover}}" alt="{{this.title}}" class="movie-cover">
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-2">
+                        <span>Show ID: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.id}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Title: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.title}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Genre: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.genre}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Rating: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.rating}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Duration: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.duration_min}} minutes</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Date Show: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.date_show}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Time Show: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.time_show}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Venue Open: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.venue}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Price: </span>
+                    </div>
+                    <div class="col">
+                        <span>Rp {{this.price}} / seat</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row my-1">
+                    <div class="col">
+                        <a href="/showtime/edit/{{this.id}}"><img src="../static/icons/edit.png" alt="E"></a>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col">
+                        <a href="/showtime/delete/{{this.id}}"><img src="../static/icons/delete.png" alt="D"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}

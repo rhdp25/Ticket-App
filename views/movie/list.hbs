@@ -12,60 +12,94 @@
     <div class="row">
         <div class="row text-center m-3">
             <div class="col">
-                <h2>Movie</h2>
+                <h2>Add Movie</h2>
             </div>
         </div>
-        <div class="row text-center m-3">
-            <div class="col">
-                <input type="text" name="title" id="title" placeholder="Input movie title">
-            </div>
-        </div>
-        <div class="row text-center m-3">
-            <div class="col-4">
-                <select name="genre_id" id="genre_id"></select>
-            </div>
-            <div class="col-4">
-                <select name="rating" id="rating">
-                    <option disabled value="...">Select rating</option>
-                    <option value="G">G</option>
-                    <option value="PG">PG</option>
-                    <option value="P13">PG-13</option>
-                    <option value="R">R</option>
-                    <option value="N17">NC-17</option>
-                </select>
-            </div>
-            <div class="col-4">
-                <input type="number" name="duration_min" placeholder="Movie duration (min)">
-            </div>
-        </div>
-        <div class="row text-center m-3">
-            <div class="col">
-                <div class="file-input-group text-start">
-                    <input type="file" hidden name=cover>
-                    <label class="input-group-text" for="file">Attach movie cover</label>
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="row m-2">
+                <div class="col-2">
+                    <span>Title: </span>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="Input movie title">
                 </div>
             </div>
-        </div>
-        <div class="row text-center m-3">
-            <div class="col">
-                <button type="submit" class="mt-4">Add</button>
+            <div class="row m-2">
+                <div class="col-2">
+                    <span>Genre ID: </span>
+                </div>
+                <div class="col">
+                    {{!-- <select name="genre_id" id="genre_id">
+                        <option value="..." disabled>Select genre...</option>
+                        {{#each movies}}
+                        <option value="{{this.genre_id}}">{{this.genre}}</option>
+                        {{/each}}
+                    </select> --}}
+                    <input type="text" class="form-control" name="genre_id" id="genre_id" placeholder="Input genre ID">
+                </div>
             </div>
-        </div>
+            <div class="row m-2">
+                <div class="col-2">
+                    <span>Rating : </span>
+                </div>
+                <div class="col">
+                    <select class="form-control" name="rating" id="rating">
+                        <option disabled value="...">Select rating</option>
+                        <option value="G">G</option>
+                        <option value="PG">PG</option>
+                        <option value="PG-13">PG-13</option>
+                        <option value="R">R</option>
+                        <option value="NC-17">NC-17</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col-2">
+                    <span>Duration : </span>
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" name="duration_min" placeholder="Movie duration (min)">
+                </div>
+            </div>
+            <div class="row text-center m-2">
+                <div class="col-2"></div>
+                <div class="col-3">
+                    <div class="file-input-group text-start">
+                        <input type="file" hidden id="file" aria-label="file upload" name="cover">
+                        <label for="file" class="form-control" >Attach Cover <img src="/static/icons/clip.png" alt=""></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col">
+                    <button type="submit" class="btn btn-outline-secondary">Add</button>
+                </div>
+            </div>
+        </form>
     </div>
+    <hr>
     <div class="row">
-        <div class="row">
+        <div class="row text-center m-3">
             <div class="col">
                 <h2>List of Movie</h2>
             </div>
         </div>
         {{#each movies}}
-        <div class="row">
+        <div class="row m-2">
             <div class="col-3">
-                <img src=".../uploads/{{this.cover}}" alt="" srcset="">
+                <img src="../uploads/{{this.cover}}" alt="{{this.title}}" class="movie-cover">
             </div>
-            <div class="col">
+            <div class="col-8">
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-2">
+                        <span>Movie ID: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.id}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
                         <span>Title: </span>
                     </div>
                     <div class="col">
@@ -73,15 +107,15 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-2">
                         <span>Genre: </span>
                     </div>
                     <div class="col">
-                        <span>{{this.genre_id}}</span>
+                        <span>{{this.genre}}</span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-2">
                         <span>Rating: </span>
                     </div>
                     <div class="col">
@@ -89,11 +123,23 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-2">
                         <span>Duration: </span>
                     </div>
                     <div class="col">
                         <span>{{this.duration_min}} minutes</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row my-1">
+                    <div class="col">
+                        <a href="/movie/edit/{{this.id}}"><img src="../static/icons/edit.png" alt="E"></a>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col">
+                        <a href="/movie/delete/{{this.id}}"><img src="../static/icons/delete.png" alt="D"></a>
                     </div>
                 </div>
             </div>

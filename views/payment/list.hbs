@@ -1,0 +1,205 @@
+{{> head}}
+{{> navbar}}
+
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row text-center m-3">
+        <div class="col">
+            <h2>Add Payment</h2>
+        </div>
+    </div>
+    <form action="" method="POST">
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Ticket ID: </span>
+        </div>
+        <div class="col">
+            {{!-- <select name="ticket_id" id="ticket_id">
+                <option value="..." disabled>Select ticket...</option>
+                {{#each payments}}
+                <option value="{{this.title_id}}">{{this.name}}</option>
+                {{/each}}
+            </select> --}}
+            <input type="text" class="form-control" name="ticket_id" id="ticket_id" placeholder="Input ticket ID">
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Amount : </span>
+        </div>
+        <div class="col">
+            <input type="number" class="form-control" name="amount" id="amount" placeholder="Input amount ticket">
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col-2">
+            <span>Sub-Total : </span>
+        </div>
+        <div class="col">
+            <div class="input-group">
+                <span class="input-group-text">Rp</span>
+                <input type="number" class="form-control" name="sub_total" id="sub_total" placeholder="Input sub-total">
+            </div>
+        </div>
+    </div>
+    <div class="row m-2">
+        <div class="col">
+            <button type="submit" class="btn btn-outline-secondary">Add</button>
+        </div>
+    </div>
+    </form>
+    <hr>
+    <div class="row">
+        <div class="row text-center m-3">
+            <div class="col">
+                <h2>List of Payments</h2>
+            </div>
+        </div>
+        {{#each payments}}
+        <div class="row m-2">
+            <div class="col-3">
+                <img src="../uploads/{{this.cover}}" alt="{{this.title}}" class="movie-cover">
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-3">
+                        <span>Payment ID: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.id}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Ticket ID: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.ticket_id}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>User: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.name}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Title: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.title}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Genre: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.genre}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Rating: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.rating}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Duration: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.duration_min}} minutes</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Date Show: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.date_show}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Time Show: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.time_show}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Venue Open: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.venue}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Price: </span>
+                    </div>
+                    <div class="col">
+                        <span>Rp {{this.price}} / seat</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Seat Numbers: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.seat_number}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Amount: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{this.amount}} seat</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span>Sub-Total: </span>
+                    </div>
+                    <div class="col">
+                        <span>Rp {{this.sub_total}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row my-1">
+                    <div class="col">
+                        <a href="/payment/edit/{{this.id}}"><img src="../static/icons/edit.png" alt="E"></a>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col">
+                        <a href="/payment/delete/{{this.id}}"><img src="../static/icons/delete.png" alt="D"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}

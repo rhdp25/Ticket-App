@@ -1,0 +1,83 @@
+{{> head}}
+{{> navbar}}
+
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
+{{#if isLogin}}
+<div class="container">
+    <div class="row">
+        <div class="row text-center m-3">
+            <div class="col">
+                <h2>Edit Movie</h2>
+            </div>
+        </div>
+        <form action="/movie/edit/{{movies.id}}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" value={{movies.id}}>
+            {{!-- <input type="hidden" name="oldImage" value={{movies.cover}}> --}}
+            <div class="row m-2">
+                <div class="col-2">
+                    <span>Title: </span>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="Input movie title" value="{{movies.title}}">
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col-2">
+                    <span>Genre ID: </span>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="genre_id" id="genre_id" placeholder="Input genre ID" value={{movies.genre_id}}>
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col-2">
+                    <span>Rating : </span>
+                </div>
+                <div class="col">
+                    <select class="form-control" name="rating" id="rating">
+                        <option disabled value="...">Select rating</option>
+                        <option value="G">G</option>
+                        <option value="PG">PG</option>
+                        <option value="PG-13">PG-13</option>
+                        <option value="R">R</option>
+                        <option value="NC-17">NC-17</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col-2">
+                    <span>Duration : </span>
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" name="duration_min" placeholder="Movie duration (min)" value={{movies.duration_min}}>
+                </div>
+            </div>
+            <div class="row text-center m-2">
+                <div class="col-2"></div>
+                <div class="col-3">
+                    <div class="file-input-group text-start">
+                        <input type="file" hidden id="file" aria-label="file upload" name="cover">
+                        <label for="file" class="form-control" >Attach Cover <img src="/static/icons/clip.png" alt=""></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col">
+                    <button type="submit" class="btn btn-outline-secondary">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{{else}}
+
+{{> notLogin}}
+
+{{/if}}
+
+{{> footer}}
