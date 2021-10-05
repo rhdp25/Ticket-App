@@ -8,6 +8,7 @@ const flash = require("express-flash");
 const app = express();
 const hbs = require("hbs");
 
+// Import routes
 const authRoute = require("./routes/auth");
 const bookingRoute = require("./routes/booking");
 const genreRoute = require("./routes/genre");
@@ -16,7 +17,7 @@ const paymentRoute = require("./routes/payment");
 const showtimeRoute = require("./routes/showtime");
 
 // Import db connection
-const dbConnection = require("./connection/db");
+// const dbConnection = require("./connection/db");
 
 app.use("/static", express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -63,7 +64,7 @@ app.get("/", function (req, res) {
   res.render("index", { title: "Ticket App", isLogin: req.session.isLogin });
 });
 
-// Mount route
+// Mount routes
 app.use("/auth", authRoute);
 app.use("/booking", bookingRoute);
 app.use("/genre", genreRoute);
@@ -71,6 +72,7 @@ app.use("/movie", movieRoute);
 app.use("/payment", paymentRoute);
 app.use("/showtime", showtimeRoute);
 
+// Create HTTP server
 const server = http.createServer(app);
 const port = 4000;
 server.listen(port, () => {

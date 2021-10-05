@@ -14,7 +14,7 @@ router.get("/register", function (req, res) {
   res.render("auth/register", { title: "Ticket App > Register", isLogin: req.session.isLogin });
 });
 
-// logout
+// Logout
 router.get("/logout", function (req, res) {
   req.session.destroy();
   res.redirect("/");
