@@ -23,7 +23,7 @@ router.get("/logout", function (req, res) {
 // Login handler
 router.post("/login", function (req, res) {
   const { email, password } = req.body;
-  const query = "SELECT id, name, email, password FROM tb_user WHERE email=?";
+  const query = "SELECT id, name, email, password, status FROM tb_user WHERE email=?";
 
   if (email == "" || password == "") {
     req.session.message = {
@@ -58,9 +58,14 @@ router.post("/login", function (req, res) {
           id: results[0].id,
           name: results[0].name,
           email: results[0].email,
+          status: results[0].status,
         };
 
-        return res.redirect("/");
+        if (req.session.user.status === "admin") {
+          return res.redirect("/admin/dashboard");
+        } else {
+          return res.redirect("/");
+        }
       }
     });
 

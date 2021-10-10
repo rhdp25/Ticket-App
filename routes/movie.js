@@ -1,25 +1,30 @@
 const dbConnection = require("../connection/db");
 const router = require("express").Router();
 const uploadFile = require("../middlewares/uploadFile");
-const pathFile = "http://localhost:5000/uploads/";
+const pathFile = "http://localhost:4000/uploads/";
 
 // Render movie page
 router.get("/list", function (req, res) {
-  const query = "SELECT m.id, m.title, g.id AS genre_id, g.genre, m.rating, m.duration_min, m.cover FROM tb_genre AS g, tb_movie AS m WHERE m.genre_id = g.id ORDER BY m.created_at DESC";
+  if (req.session.user.status !== "admin") {
+    req.session.message = {
+      type: "danger",
+      message: "You're not the admin of this website",
+    };
+    return res.redirect("/");
+  }
+
+  const query1 = "SELECT m.id, m.title, g.id AS genre_id, g.genre, m.rating, m.duration_min, m.cover, m.synopsis, m.trailer_link FROM tb_movie AS m, tb_genre AS g WHERE m.genre_id = g.id ORDER BY m.created_at DESC";
+  const query2 = "SELECT * FROM tb_genre ORDER BY genre";
 
   dbConnection.getConnection((err, conn) => {
     if (err) throw err;
 
-    conn.query(query, (err, results) => {
-      if (err) throw err;
+    conn.query(query1, (err, movies) => {
+      conn.query(query2, (err, genres) => {
+        if (err) throw err;
 
-      let movies = [];
-
-      for (let result of results) {
-        movies.push(result);
-      }
-
-      res.render("movie/list", { title: "Ticket App > Movie", isLogin: req.session.isLogin, movies });
+        return res.render("movie/list", { title: "Ticket App > Movie", isLogin: req.session.isLogin, movies, genres });
+      });
     });
 
     conn.release();
@@ -28,11 +33,12 @@ router.get("/list", function (req, res) {
 
 // Handle add movie from client
 router.post("/list", uploadFile("cover"), function (req, res) {
-  const { title, genre_id, rating, duration_min } = req.body;
+  const { title, genre_id, rating, duration_min, synopsis, trailer_link } = req.body;
   let cover = req.file.filename;
-  const query = "INSERT INTO tb_movie (title, genre_id, rating, duration_min, cover) VALUES (?,?,?,?,?)";
 
-  if (title == "" || genre_id == "" || rating == "" || duration_min == "" || cover == "") {
+  const query = "INSERT INTO tb_movie (title, genre_id, rating, duration_min, cover, synopsis, trailer_link) VALUES (?,?,?,?,?,?,?)";
+
+  if (title == "" || genre_id == "" || rating == "" || duration_min == "" || cover == "" || synopsis == "" || trailer_link == "") {
     req.session.message = {
       type: "danger",
       message: "Please fulfill input",
@@ -45,7 +51,7 @@ router.post("/list", uploadFile("cover"), function (req, res) {
     if (err) throw err;
 
     // Execute query
-    conn.query(query, [title, genre_id, rating, duration_min, cover], (err, results) => {
+    conn.query(query, [title, genre_id, rating, duration_min, cover, synopsis, trailer_link], (err, results) => {
       if (err) {
         req.session.message = {
           type: "danger",
@@ -70,27 +76,35 @@ router.post("/list", uploadFile("cover"), function (req, res) {
 
 // Render edit movie page
 router.get("/edit/:id", function (req, res) {
+  if (req.session.user.status !== "admin") {
+    req.session.message = {
+      type: "danger",
+      message: "You're not the admin of this website",
+    };
+    return res.redirect("/");
+  }
+
   const { id } = req.params;
 
-  const query = "SELECT * FROM tb_movie WHERE id = ?";
+  const query1 = "SELECT * FROM tb_movie WHERE id = ?";
+  const query2 = "SELECT * FROM tb_genre ORDER BY genre";
 
   dbConnection.getConnection((err, conn) => {
     if (err) {
       throw err;
     }
 
-    conn.query(query, [id], (err, results) => {
-      if (err) throw err;
+    conn.query(query1, [id], (err, movie) => {
+      conn.query(query2, [id], (err, genres) => {
+        if (err) throw err;
 
-      const movies = {
-        ...results[0],
-        cover: pathFile + results[0].cover,
-        title: results[0].title,
-        genre_id: results[0].genre_id,
-        duration_min: results[0].duration_min,
-      };
+        const movies = {
+          ...movie[0],
+          cover: pathFile + movie[0].cover,
+        };
 
-      res.render("movie/edit", { title: "Ticket App > Edit Movie", isLogin: req.session.isLogin, movies });
+        res.render("movie/edit", { title: "Ticket App > Edit Movie", isLogin: req.session.isLogin, movies, genres });
+      });
     });
 
     conn.release();
@@ -99,23 +113,21 @@ router.get("/edit/:id", function (req, res) {
 
 // Handle update movie
 router.post("/edit/:id", uploadFile("cover"), function (req, res) {
-  const { id, title, genre_id, rating, duration_min } = req.body;
+  const { id, title, genre_id, rating, duration_min, synopsis, trailer_link, oldImage } = req.body;
 
-  // let cover = oldImage.replace(pathFile, "");
+  let cover = oldImage.replace(pathFile, "");
 
-  // if (req.file) {
-  //   cover = req.file.filename;
-  // }
+  if (req.file) {
+    cover = req.file.filename;
+  }
 
-  let cover = req.file.filename;
-
-  const query = "UPDATE tb_movie SET title = ?, genre_id = ?, rating = ? duration_min = ?, cover = ?  WHERE id = ?";
+  const query = "UPDATE tb_movie SET title = ?, genre_id = ?, rating = ?, duration_min = ?, cover = ?, synopsis = ?, trailer_link = ?  WHERE id = ?";
 
   dbConnection.getConnection((err, conn) => {
     if (err) throw err;
 
     // Execute query
-    conn.query(query, [title, genre_id, rating, duration_min, cover, id], (err, results) => {
+    conn.query(query, [title, genre_id, rating, duration_min, cover, synopsis, trailer_link, id], (err, results) => {
       if (err) {
         console.log(err);
 
@@ -124,14 +136,14 @@ router.post("/edit/:id", uploadFile("cover"), function (req, res) {
           message: "Server error!",
         };
 
-        res.redirect(`/movie/edit/${id}}`);
+        res.redirect(`/admin/movie/edit/${id}}`);
       } else {
         req.session.message = {
           type: "success",
           message: "Movie updated successfull.",
         };
 
-        res.redirect("/movie/list");
+        res.redirect("/admin/movie/list");
       }
     });
 
@@ -142,6 +154,14 @@ router.post("/edit/:id", uploadFile("cover"), function (req, res) {
 
 // Handle delete movie
 router.get("/delete/:id", function (req, res) {
+  if (req.session.user.status !== "admin") {
+    req.session.message = {
+      type: "danger",
+      message: "You're not the admin of this website",
+    };
+    return res.redirect("/");
+  }
+
   const { id } = req.params;
 
   const query = "DELETE FROM tb_movie WHERE id = ?";
@@ -155,14 +175,14 @@ router.get("/delete/:id", function (req, res) {
           type: "danger",
           message: err.message,
         };
-        res.redirect("/movie/list");
+        res.redirect("/admin/movie/list");
       }
 
       req.session.message = {
         type: "success",
         message: "Movie successfully deleted",
       };
-      res.redirect("/movie/list");
+      res.redirect("/admin/movie/list");
     });
 
     conn.release();

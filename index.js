@@ -10,6 +10,7 @@ const hbs = require("hbs");
 
 // Import routes
 const authRoute = require("./routes/auth");
+const adminRoute = require("./routes/admin");
 const bookingRoute = require("./routes/booking");
 const genreRoute = require("./routes/genre");
 const movieRoute = require("./routes/movie");
@@ -66,11 +67,12 @@ app.get("/", function (req, res) {
 
 // Mount routes
 app.use("/auth", authRoute);
-app.use("/booking", bookingRoute);
-app.use("/genre", genreRoute);
-app.use("/movie", movieRoute);
-app.use("/payment", paymentRoute);
-app.use("/showtime", showtimeRoute);
+app.use("/admin", adminRoute);
+app.use("/admin/booking", bookingRoute);
+app.use("/admin/genre", genreRoute);
+app.use("/admin/movie", movieRoute);
+app.use("/admin/payment", paymentRoute);
+app.use("/admin/showtime", showtimeRoute);
 
 // Create HTTP server
 const server = http.createServer(app);

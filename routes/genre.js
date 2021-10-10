@@ -3,21 +3,23 @@ const router = require("express").Router();
 
 // Render genre page
 router.get("/list", function (req, res) {
+  if (req.session.user.status !== "admin") {
+    req.session.message = {
+      type: "danger",
+      message: "You're not the admin of this website",
+    };
+    return res.redirect("/");
+  }
+
   const query = "SELECT * FROM tb_genre ORDER BY created_at DESC";
 
   dbConnection.getConnection((err, conn) => {
     if (err) throw err;
 
-    conn.query(query, (err, results) => {
+    conn.query(query, (err, genres) => {
       if (err) throw err;
 
-      let genres = [];
-
-      for (let result of results) {
-        genres.push(result);
-      }
-
-      res.render("genre/list", { title: "Ticket App > Genre", isLogin: req.session.isLogin, genres });
+      return res.render("genre/list", { title: "Ticket App > Genre", isLogin: req.session.isLogin, genres });
     });
 
     conn.release();
@@ -68,6 +70,14 @@ router.post("/list", function (req, res) {
 
 // Render edit genre page
 router.get("/edit/:id", function (req, res) {
+  if (req.session.user.status !== "admin") {
+    req.session.message = {
+      type: "danger",
+      message: "You're not the admin of this website",
+    };
+    return res.redirect("/");
+  }
+
   const { id } = req.params;
 
   const query = "SELECT * FROM tb_genre WHERE id = ?";
@@ -106,14 +116,14 @@ router.post("/edit/:id", function (req, res) {
           message: "Server error!",
         };
 
-        res.redirect(`/genre/edit/${id}}`);
+        res.redirect(`/admin/genre/edit/${id}}`);
       } else {
         req.session.message = {
           type: "success",
           message: "Genre updated successfull.",
         };
 
-        res.redirect("/genre/list");
+        res.redirect("/admin/genre/list");
       }
     });
 
@@ -124,6 +134,14 @@ router.post("/edit/:id", function (req, res) {
 
 // Handle delete genre
 router.get("/delete/:id", function (req, res) {
+  if (req.session.user.status !== "admin") {
+    req.session.message = {
+      type: "danger",
+      message: "You're not the admin of this website",
+    };
+    return res.redirect("/");
+  }
+
   const { id } = req.params;
 
   const query = "DELETE FROM tb_genre WHERE id = ?";
@@ -137,14 +155,14 @@ router.get("/delete/:id", function (req, res) {
           type: "danger",
           message: err.message,
         };
-        res.redirect("/genre/list");
+        res.redirect("/admin/genre/list");
       }
 
       req.session.message = {
         type: "success",
         message: "Genre successfully deleted",
       };
-      res.redirect("/genre/list");
+      res.redirect("/admin/genre/list");
     });
 
     conn.release();

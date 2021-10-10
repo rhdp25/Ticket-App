@@ -3,22 +3,30 @@ const router = require("express").Router();
 
 // Render booking page
 router.get("/list", function (req, res) {
-  const query =
+  if (req.session.user.status !== "admin") {
+    req.session.message = {
+      type: "danger",
+      message: "You're not the admin of this website",
+    };
+    return res.redirect("/");
+  }
+
+  const query1 =
     "SELECT t.id, u.id AS user_id, u.name, st.id AS showtime_id, m.title, g.genre, m.rating, m.duration_min, m.cover, st.date_show, st.time_show, st.venue, st.price, t.seat_number FROM tb_ticket AS t, tb_user AS u, tb_genre AS g, tb_movie AS m, tb_showtime AS st WHERE t.user_id = u.id AND t.showtime_id = st.id AND st.movie_id = m.id AND m.genre_id = g.id ORDER BY t.created_at DESC";
+  const query2 = "SELECT * FROM tb_user ORDER BY name";
+  const query3 = "SELECT st.id, m.id AS movie_id, m.title, st.date_show, st.time_show, st.venue, st.price FROM tb_movie AS m, tb_showtime AS st WHERE st.movie_id = m.id ORDER BY st.created_at DESC";
 
   dbConnection.getConnection((err, conn) => {
     if (err) throw err;
 
-    conn.query(query, (err, results) => {
-      if (err) throw err;
+    conn.query(query1, (err, bookings) => {
+      conn.query(query2, (err, users) => {
+        conn.query(query3, (err, showtimes) => {
+          if (err) throw err;
 
-      let bookings = [];
-
-      for (let result of results) {
-        bookings.push(result);
-      }
-
-      res.render("booking/list", { title: "Ticket App > Booking", isLogin: req.session.isLogin, bookings });
+          return res.render("booking/list", { title: "Ticket App > Booking", isLogin: req.session.isLogin, bookings, users, showtimes });
+        });
+      });
     });
 
     conn.release();
@@ -69,21 +77,35 @@ router.post("/list", function (req, res) {
 
 // Render edit booking page
 router.get("/edit/:id", function (req, res) {
+  if (req.session.user.status !== "admin") {
+    req.session.message = {
+      type: "danger",
+      message: "You're not the admin of this website",
+    };
+    return res.redirect("/");
+  }
+
   const { id } = req.params;
 
-  const query = "SELECT * FROM tb_ticket WHERE id = ?";
+  const query1 = "SELECT * FROM tb_ticket WHERE id = ?";
+  const query2 = "SELECT * FROM tb_user ORDER BY name";
+  const query3 = "SELECT st.id, m.id AS movie_id, m.title, st.date_show, st.time_show, st.venue, st.price FROM tb_movie AS m, tb_showtime AS st WHERE st.movie_id = m.id ORDER BY st.created_at DESC";
 
   dbConnection.getConnection((err, conn) => {
     if (err) {
       throw err;
     }
 
-    conn.query(query, [id], (err, results) => {
-      if (err) throw err;
+    conn.query(query1, [id], (err, booking) => {
+      conn.query(query2, [id], (err, users) => {
+        conn.query(query3, [id], (err, showtimes) => {
+          if (err) throw err;
 
-      const bookings = { ...results[0] };
+          const bookings = { ...booking[0] };
 
-      res.render("booking/edit", { title: "Ticket App > Edit Booking", isLogin: req.session.isLogin, bookings });
+          res.render("booking/edit", { title: "Ticket App > Edit Booking", isLogin: req.session.isLogin, bookings, users, showtimes });
+        });
+      });
     });
 
     conn.release();
@@ -107,14 +129,14 @@ router.post("/edit/:id", function (req, res) {
           message: "Server error!",
         };
 
-        res.redirect(`/booking/edit/${id}}`);
+        res.redirect(`/admin/booking/edit/${id}}`);
       } else {
         req.session.message = {
           type: "success",
           message: "Booking updated successfull.",
         };
 
-        res.redirect("/booking/list");
+        res.redirect("/admin/booking/list");
       }
     });
 
@@ -125,9 +147,17 @@ router.post("/edit/:id", function (req, res) {
 
 // Handle delete booking
 router.get("/delete/:id", function (req, res) {
+  if (req.session.user.status !== "admin") {
+    req.session.message = {
+      type: "danger",
+      message: "You're not the admin of this website",
+    };
+    return res.redirect("/");
+  }
+
   const { id } = req.params;
 
-  const query = "DELETE FROM tb_booking WHERE id = ?";
+  const query = "DELETE FROM tb_ticket WHERE id = ?";
 
   dbConnection.getConnection((err, conn) => {
     if (err) throw err;
@@ -138,14 +168,14 @@ router.get("/delete/:id", function (req, res) {
           type: "danger",
           message: err.message,
         };
-        res.redirect("/booking/list");
+        res.redirect("/admin/booking/list");
+      } else {
+        req.session.message = {
+          type: "success",
+          message: "Booking successfully deleted",
+        };
+        res.redirect("/admin/booking/list");
       }
-
-      req.session.message = {
-        type: "success",
-        message: "Booking successfully deleted",
-      };
-      res.redirect("/booking/list");
     });
 
     conn.release();
