@@ -1,0 +1,61 @@
+{{> head}}
+{{> navbar}}
+
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
+    <div class="container">
+      <div class="section text-center">
+        <h2 class="title">{{movie.title}}</h2>
+      </div>
+      <div class="row">
+          <div class="row m-2">
+            <div class="col-3">
+                <div class="row p-1">
+                    <img src="/uploads/{{movie.cover}}" alt="{{movie.title}}" style="max-width: 400px;">
+                </div>
+                <div class="row">
+                        <a href="{{movie.trailer_link}}" class="btn btn-secondary btn-lg w-100" target="_blank">
+                            Watch Trailer
+                        </a>
+                </div>
+                <div class="row">
+                        <a href="/user/movieTicket" class="btn btn-primary btn-lg w-100">
+                            Buy Ticket
+                        </a>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-2">
+                        <span>Rating: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{movie.rating}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Duration: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{movie.duration_min}} minutes</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <span>Synopsis: </span>
+                    </div>
+                    <div class="col">
+                        <span>{{movie.synopsis}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+{{> footer}}

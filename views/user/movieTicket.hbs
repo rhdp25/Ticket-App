@@ -1,0 +1,59 @@
+{{> head}}
+{{> navbar}}
+
+{{#if message}}
+  <div class="alert alert-{{message.type}}" role="alert">
+    {{message.message}}
+  </div>
+{{/if}}
+
+<div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title">Booking Ticket</h4>
+            </div>
+            <div class="card-body">
+              <form action="" method="POST">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>User</label>
+                      <input type="text" class="form-control" name="user" value="-" readonly>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Show</label>
+                      <select name="showtime_id" id="showtime_id" class="form-control" >
+                        <option value="..." disabled>Select show...</option>
+                        {{#each showtimes}}
+                        <option value="{{this.id}}">{{this.title}} | {{this.date_show}} | {{this.time_show}} | {{this.venue}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Seat Number(s)</label>
+                      <input type="text" class="form-control" name="seat_number" >
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary pull-right">Add Booking</button>
+                <div class="clearfix"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+{{> footer}}

@@ -16,9 +16,10 @@ const genreRoute = require("./routes/genre");
 const movieRoute = require("./routes/movie");
 const paymentRoute = require("./routes/payment");
 const showtimeRoute = require("./routes/showtime");
+const userRoute = require("./routes/user");
 
 // Import db connection
-// const dbConnection = require("./connection/db");
+const dbConnection = require("./connection/db");
 
 app.use("/static", express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -62,7 +63,17 @@ app.use((req, res, next) => {
 
 // Render home page
 app.get("/", function (req, res) {
-  res.render("index", { title: "Ticket App", isLogin: req.session.isLogin });
+  const query = "SELECT * FROM tb_movie ORDER BY created_at DESC";
+
+  dbConnection.getConnection((err, conn) => {
+    if (err) throw err;
+
+    conn.query(query, (err, movies) => {
+      if (err) throw err;
+
+      res.render("index", { title: "Ticket App", isLogin: req.session.isLogin, movies });
+    });
+  });
 });
 
 // Mount routes
@@ -73,6 +84,7 @@ app.use("/admin/genre", genreRoute);
 app.use("/admin/movie", movieRoute);
 app.use("/admin/payment", paymentRoute);
 app.use("/admin/showtime", showtimeRoute);
+app.use("/user", userRoute);
 
 // Create HTTP server
 const server = http.createServer(app);

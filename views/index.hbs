@@ -22,7 +22,37 @@
   <div class="main main-raised">
     <div class="container">
       <div class="section text-center">
-        <h2 class="title">Your main section here</h2>
+        <h2 class="title">Movie Catalogue</h2>
+      </div>
+      <div class="row">
+        {{#each movies}}
+        <div class="col-3">
+          <div class="card" data-animation="true">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <a class="d-block blur-shadow-image">
+                <img src="/uploads/{{this.cover}}" style="max-width: 225px" alt="{{this.title}}" class="img-fluid shadow border-radius-lg">
+              </a>
+              <div class="colored-shadow"></div>
+            </div>
+            <div class="card-body text-center">
+              <h5 class="font-weight-normal mt-3">
+                {{this.title}}
+              </h5>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer d-flex">
+              <div class="d-flex mt-n6 mx-auto">
+                <a href="/user/movieDetail/{{this.id}}" class="btn text-primary ms-auto border-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Detail">
+                  <i class="material-icons text-lg">info</i>Detail
+                </a>
+                <a href="/user/movieTicket" class="btn text-success me-auto border-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Buy Ticket">
+                  <i class="material-icons text-lg">book_online</i>Buy Ticket
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/each}}
       </div>
     </div>
   </div>
